@@ -5,14 +5,17 @@ import values_biomasse, values_pumpspeicher, values_sonstige_erneuerbare, values
 
 data_biomasse, data_pumpspeicher, data_sonstige_erneuerbare, data_wasserkraft, data_wind_onshore, data_photovoltaik, data_wind_offshore = values_biomasse.values_biomasse(), values_pumpspeicher.values_pumpspeicher(), values_sonstige_erneuerbare.values_sonstige_erneuerbare(), values_wasserkraft.values_wasserkraft(), values_wind_onshore.values_wind_onshore(), values_gesamt.get_data_out_of_r1_gesamt_json(times_gesamt.give_right_timestamp()), values_wind_offshore.values_wind_offshore()
 
+#Jetzt die nicht grünen Energiedaten importieren
+#benutzen tu ich die unten
+import values_braunkohle, values_erdgas, values_kernenergie, values_sonstige_konventionelle, values_steinkohle
+
+data_braunkohle, data_erdgas, data_kernenergie, data_sonstige_konventionelle, data_steinkohle = values_braunkohle.values_braunkohle(), values_erdgas.values_erdgas(), values_kernenergie.values_kernenergie(), values_sonstige_konventionelle.values_sonstige_konventionelle(), values_steinkohle.values_steinkohle()
+
+# !! Hier fängt der arbeitende Code an !!
+
 count_for_timestamps_wasserkraft = 0
 count_overall_wasserkraft = 0
 specific_count_right_timestamp_wasserkraft = None
-
-MWh_for_specific_timestamp_wasserkraft = None
-MWh_for_specific_timestamp_pumpspeicher = None
-MWh_for_specific_timestamp_sonstige_erneuerbare = None
-MWh_for_specific_timestamp_values_wind_onshore = None
 
 search_timestamp = int(input("Searched timestamp: "))
 
@@ -184,3 +187,27 @@ print("Dies ist die gesamte Erzeugung grüner Energie zu dem gesuchten Timestamp
 
 #Jetzt noch die genauen Daten für nicht grüne Energie herausfinden, um den Anteil an grünem Strom im Bundesstromnetz berechnen zu können
 
+count_for_timestamps_braunkohle = 0
+count_overall_braunkohle = 0
+specific_count_right_timestamp_braunkohle = None
+
+#Hier wird geschaut, wo der gesuchte Timestamp zu finden ist
+for i in data_braunkohle["series"]:
+    for k in i:
+        count_overall_braunkohle += 1
+        if count_for_timestamps_braunkohle % 2 == 0:
+            if k == search_timestamp:
+                print("Gesuchter Timestamp:  ", k)
+                specific_count_right_timestamp_braunkohle = count_overall_braunkohle
+        count_for_timestamps_braunkohle += 1
+
+count_overall_braunkohle = 0
+
+#Hier wird dann zur richtigen Position(abhängig vom gesuchten Timestamp) die MWh Menge herausgefunden
+for i in data_braunkohle["series"]:
+    for k in i:
+        count_overall_braunkohle += 1
+        if count_overall_braunkohle == specific_count_right_timestamp_braunkohle + 1:
+            MWh_for_specific_timestamp_braunkohle = k
+
+print("Richtige MWh für Braunkohle:", MWh_for_specific_timestamp_braunkohle)
