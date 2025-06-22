@@ -18,5 +18,5 @@ def values_kernenergie():
 
 values = values_kernenergie()
 
-with open("daten_kernenergie2.json", "w") as file:
+with open("daten_kernenergie.json", "w") as file:
     json.dump(values, file, indent=4, ensure_ascii=False)

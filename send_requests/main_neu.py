@@ -19,13 +19,14 @@ specific_count_right_timestamp_wasserkraft = None
 
 search_timestamp = int(input("Searched timestamp: "))
 
+print("Gesuchter Timestamp: ", search_timestamp)
+
 #Hier wird geschaut, wo der gesuchte Timestamp zu finden ist
 for i in data_wasserkraft["series"]:
     for k in i:
         count_overall_wasserkraft += 1
         if count_for_timestamps_wasserkraft % 2 == 0:
             if k == search_timestamp:
-                print("Gesuchter Timestamp:  ", k)
                 specific_count_right_timestamp_wasserkraft = count_overall_wasserkraft
         count_for_timestamps_wasserkraft += 1
 
@@ -50,7 +51,6 @@ for i in data_pumpspeicher["series"]:
         count_overall_pumpspeicher += 1
         if count_for_timestamps_pumpspeicher % 2 == 0:
             if k == search_timestamp:
-                print("Gesuchter Timestamp:  ", k)
                 specific_count_right_timestamp_pumpspeicher = count_overall_pumpspeicher
         count_for_timestamps_pumpspeicher += 1
 
@@ -73,7 +73,6 @@ for i in data_sonstige_erneuerbare["series"]:
         count_overall_sonstige_erneuerbare += 1
         if count_for_timestamps_sonstige_erneuerbare % 2 == 0:
             if k == search_timestamp:
-                print("Gesuchter Timestamp:  ", k)
                 specific_count_right_timestamp_sonstige_erneuerbare = count_overall_sonstige_erneuerbare
         count_for_timestamps_sonstige_erneuerbare += 1
 
@@ -96,7 +95,6 @@ for i in data_wind_onshore["series"]:
         count_overall_wind_onshore += 1
         if count_for_timestamps_wind_onshore % 2 == 0:
             if k == search_timestamp:
-                print("Gesuchter Timestamp:  ", k)
                 specific_count_right_timestamp_wind_onshore = count_overall_wind_onshore
         count_for_timestamps_wind_onshore += 1
 
@@ -119,7 +117,6 @@ for i in data_biomasse["series"]:
         count_overall_biomasse += 1
         if count_for_timestamps_biomasse % 2 == 0:
             if k == search_timestamp:
-                print("Gesuchter Timestamp:  ", k)
                 specific_count_right_timestamp_biomasse = count_overall_biomasse
         count_for_timestamps_biomasse += 1
 
@@ -142,7 +139,6 @@ for i in data_photovoltaik["series"]:
         count_overall_photovoltaik += 1
         if count_for_timestamps_photovoltaik % 2 == 0:
             if k == search_timestamp:
-                print("Gesuchter Timestamp:  ", k)
                 specific_count_right_timestamp_photovoltaik = count_overall_photovoltaik
         count_for_timestamps_photovoltaik += 1
 
@@ -165,7 +161,6 @@ for i in data_wind_offshore["series"]:
         count_overall_wind_offshore += 1
         if count_for_timestamps_wind_offshore % 2 == 0:
             if k == search_timestamp:
-                print("Gesuchter Timestamp:  ", k)
                 specific_count_right_timestamp_wind_offshore = count_overall_wind_offshore
         count_for_timestamps_wind_offshore += 1
 
@@ -191,19 +186,18 @@ count_for_timestamps_braunkohle = 0
 count_overall_braunkohle = 0
 specific_count_right_timestamp_braunkohle = None
 
-#Hier wird geschaut, wo der gesuchte Timestamp zu finden ist
+
 for i in data_braunkohle["series"]:
     for k in i:
         count_overall_braunkohle += 1
         if count_for_timestamps_braunkohle % 2 == 0:
             if k == search_timestamp:
-                print("Gesuchter Timestamp:  ", k)
                 specific_count_right_timestamp_braunkohle = count_overall_braunkohle
         count_for_timestamps_braunkohle += 1
 
 count_overall_braunkohle = 0
 
-#Hier wird dann zur richtigen Position(abhängig vom gesuchten Timestamp) die MWh Menge herausgefunden
+
 for i in data_braunkohle["series"]:
     for k in i:
         count_overall_braunkohle += 1
@@ -211,3 +205,28 @@ for i in data_braunkohle["series"]:
             MWh_for_specific_timestamp_braunkohle = k
 
 print("Richtige MWh für Braunkohle:", MWh_for_specific_timestamp_braunkohle)
+
+#Jetzt für Erdgas
+count_for_timestamps_erdgas = 0
+count_overall_erdgas = 0
+specific_count_right_timestamp_erdgas = None
+
+
+for i in data_erdgas["series"]:
+    for k in i:
+        count_overall_erdgas += 1
+        if count_for_timestamps_erdgas % 2 == 0:
+            if k == search_timestamp:
+                specific_count_right_timestamp_erdgas = count_overall_erdgas
+        count_for_timestamps_erdgas += 1
+
+count_overall_erdgas = 0
+
+
+for i in data_erdgas["series"]:
+    for k in i:
+        count_overall_erdgas += 1
+        if count_overall_erdgas == specific_count_right_timestamp_erdgas + 1:
+            MWh_for_specific_timestamp_erdgas = k
+
+print("Richtige MWh für Erdgas:", MWh_for_specific_timestamp_erdgas)
