@@ -1,3 +1,5 @@
+import datetime
+import plotly.graph_objects as go
 #!Values für Photovoltaik
 import values_gesamt, times_gesamt
 #!
@@ -7,9 +9,9 @@ data_biomasse, data_pumpspeicher, data_sonstige_erneuerbare, data_wasserkraft, d
 
 #Jetzt die nicht grünen Energiedaten importieren
 #benutzen tu ich die unten
-import values_braunkohle, values_erdgas, values_kernenergie, values_sonstige_konventionelle, values_steinkohle
+import values_braunkohle, values_erdgas, values_sonstige_konventionelle, values_steinkohle
 
-data_braunkohle, data_erdgas, data_kernenergie, data_sonstige_konventionelle, data_steinkohle = values_braunkohle.values_braunkohle(), values_erdgas.values_erdgas(), values_kernenergie.values_kernenergie(), values_sonstige_konventionelle.values_sonstige_konventionelle(), values_steinkohle.values_steinkohle()
+data_braunkohle, data_erdgas, data_sonstige_konventionelle, data_steinkohle = values_braunkohle.values_braunkohle(), values_erdgas.values_erdgas(), values_sonstige_konventionelle.values_sonstige_konventionelle(), values_steinkohle.values_steinkohle()
 
 # !! Hier fängt der arbeitende Code an !!
 
@@ -18,6 +20,12 @@ count_overall_wasserkraft = 0
 specific_count_right_timestamp_wasserkraft = None
 
 search_timestamp = int(input("Searched timestamp: "))
+
+convert_timestamp = search_timestamp / 1000
+
+dt = datetime.datetime.fromtimestamp(convert_timestamp)
+
+print("vorstellbare Zeit des Timestamps:", dt.strftime("%Y-%m-%d %H:%M:%S"))
 
 print("Gesuchter Timestamp: ", search_timestamp)
 
@@ -230,3 +238,71 @@ for i in data_erdgas["series"]:
             MWh_for_specific_timestamp_erdgas = k
 
 print("Richtige MWh für Erdgas:", MWh_for_specific_timestamp_erdgas)
+
+#Jetzt für sonstige Konventionelle
+
+count_for_timestamps_sonstige_konventionelle = 0
+count_overall_sonstige_konventionelle = 0
+specific_count_right_timestamp_sonstige_konventionelle = None
+
+
+for i in data_sonstige_konventionelle["series"]:
+    for k in i:
+        count_overall_sonstige_konventionelle += 1
+        if count_for_timestamps_sonstige_konventionelle % 2 == 0:
+            if k == search_timestamp:
+                specific_count_right_timestamp_sonstige_konventionelle = count_overall_sonstige_konventionelle
+        count_for_timestamps_sonstige_konventionelle += 1
+
+count_overall_sonstige_konventionelle = 0
+
+
+for i in data_sonstige_konventionelle["series"]:
+    for k in i:
+        count_overall_sonstige_konventionelle += 1
+        if count_overall_sonstige_konventionelle == specific_count_right_timestamp_sonstige_konventionelle + 1:
+            MWh_for_specific_timestamp_sonstige_konventionelle = k
+
+print("Richtige MWh für sonstige Konventionelle:", MWh_for_specific_timestamp_sonstige_konventionelle)
+
+#Jetzt für Steinkohle
+
+count_for_timestamps_steinkohle = 0
+count_overall_steinkohle = 0
+specific_count_right_timestamp_steinkohle = None
+
+
+for i in data_steinkohle["series"]:
+    for k in i:
+        count_overall_steinkohle += 1
+        if count_for_timestamps_steinkohle % 2 == 0:
+            if k == search_timestamp:
+                specific_count_right_timestamp_steinkohle = count_overall_steinkohle
+        count_for_timestamps_steinkohle += 1
+
+count_overall_steinkohle = 0
+
+
+for i in data_steinkohle["series"]:
+    for k in i:
+        count_overall_steinkohle += 1
+        if count_overall_steinkohle == specific_count_right_timestamp_steinkohle + 1:
+            MWh_for_specific_timestamp_steinkohle = k
+
+print("Richtige MWh für Steinkohle:", MWh_for_specific_timestamp_steinkohle)
+
+gesamt_nicht_grüne_energie = MWh_for_specific_timestamp_braunkohle + MWh_for_specific_timestamp_erdgas + MWh_for_specific_timestamp_sonstige_konventionelle + MWh_for_specific_timestamp_steinkohle
+
+print("Dies ist die gesamte Erzeugung nicht grüner Energie zu dem gesuchten Timestamp: ", gesamt_nicht_grüne_energie)
+
+gesamt_energie = gesamt_grüne_energie + gesamt_nicht_grüne_energie
+
+anteil_grüne_energie = (gesamt_grüne_energie / gesamt_energie) * 100
+
+anteil_nicht_grüne_energie = (gesamt_nicht_grüne_energie / gesamt_energie) * 100
+
+print("Anteil grüne Energie: ", round(anteil_grüne_energie, 2), "%", "Anteil nicht grüne Energie:", round(anteil_nicht_grüne_energie, 2), "%")
+
+graph = go.Figure(data=go.Bar(x=[1, 2], y=[anteil_grüne_energie, anteil_nicht_grüne_energie]))
+graph.show()
+#graph.write_html("first_plot.html", auto_open=True)
