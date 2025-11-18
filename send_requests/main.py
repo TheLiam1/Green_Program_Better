@@ -6,7 +6,7 @@ import values_biomasse, values_pumpspeicher, values_sonstige_erneuerbare, values
 data_biomasse, data_pumpspeicher, data_sonstige_erneuerbare, data_wasserkraft, data_wind_onshore, daten_photovoltaik = values_biomasse.values_biomasse(), values_pumpspeicher.values_pumpspeicher(), values_sonstige_erneuerbare.values_sonstige_erneuerbare(), values_wasserkraft.values_wasserkraft(), values_wind_onshore.values_wind_onshore(), values_gesamt.get_data_out_of_r1_gesamt_json(times_gesamt.give_right_timestamp())
 count_for_timestamps_wasserkraft = 0
 count_overall_wasserkraft = 0
-specific_count_right_timestamp_wasserkraft = None
+specific_count_right_timestamp_wasserkraft = 1
 MWh_for_specific_timestamp_wasserkraft = None
 MWh_for_specific_timestamp_pumpspeicher = None
 MWh_for_specific_timestamp_sonstige_erneuerbare = None
@@ -36,7 +36,7 @@ for i in data_wasserkraft["series"]:
 #Hier für Pumpspeicher Energie
 count_for_timestamps_pumpspeicher = 0
 count_overall_pumpspeicher = 0
-specific_count_right_timestamp_pumpspeicher = None
+specific_count_right_timestamp_pumpspeicher = 1
 
 for i in data_pumpspeicher["series"]:
     for k in i:
@@ -58,7 +58,7 @@ for i in data_pumpspeicher["series"]:
 #Hier für sonstige Erneuerbare
 count_for_timestamps_sonstige_erneuerbare = 0
 count_overall_sonstige_erneuerbare = 0
-specific_count_right_timestamp_sonstige_erneuerbare = None
+specific_count_right_timestamp_sonstige_erneuerbare = 1
 
 for i in data_sonstige_erneuerbare["series"]:
     for k in i:
